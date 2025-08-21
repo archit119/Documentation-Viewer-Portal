@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 // import DiagramViewer from './DiagramViewer';
 
+const API_BASE_URL = 'http://localhost:5000/api';
+
 const parseMarkdownToSections = (markdown) => {
   if (!markdown) return [];
   // helpers to build unique, URL-safe ids
@@ -740,7 +742,7 @@ chips.forEach(chip => {
     setFileModalLoading(true);
     setFileModalOpen(true);
 
-    const resp = await fetch(`http://localhost:5000/api/projects/${project.id}/files/${encodeURIComponent(fileName)}`, {
+    const resp = await fetch(`${API_BASE_URL}/projects/${project.id}/files/${encodeURIComponent(fileName)}`, {
       headers: {
         'Content-Type': 'application/json',
         ...(projectService?.token && { 'Authorization': `Bearer ${projectService.token}` })
@@ -876,7 +878,7 @@ const handleSaveAllTabs = async (sectionsArg) => {
     // Convert sections back to combined documentation
     const combinedContent = currentSections.map(section => section.fullContent).join('\n\n---\n\n');
     
-    const response = await fetch(`http://localhost:5000/api/projects/${project.id}/documentation`, {
+    const response = await fetch(`${API_BASE_URL}/projects/${project.id}/documentation`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -913,7 +915,7 @@ const handleSaveDocumentation = async (newSectionContent) => {
   try {
     console.log('💾 Saving section:', activeSectionId, 'Content length:', newSectionContent.length);
     
-    const response = await fetch(`http://localhost:5000/api/projects/${project.id}/documentation/section`, {
+    const response = await fetch(`${API_BASE_URL}/projects/${project.id}/documentation/section`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

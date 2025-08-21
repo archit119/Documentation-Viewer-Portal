@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import DocumentationViewer from '../components/features/DocumentationViewer';
 import JSZip from 'jszip';
 
+const API_BASE_URL = 'http://localhost:5000/api';
+
 // Add this style block
 const floatingStyles = `
   @keyframes float {
@@ -33,7 +35,7 @@ if (typeof document !== 'undefined') {
 // Backend-connected ProjectService
 class ProjectService {
   constructor() {
-    this.baseURL = 'http://localhost:5000/api';
+    this.baseURL = API_BASE_URL;
     this.token = localStorage.getItem('auth_token');
     this.userRole = localStorage.getItem('user_role');
     this.documentationService = 'documentation_service'; // Reference to backend service
@@ -1052,7 +1054,7 @@ function ProjectViewModal({ project, isOpen, onClose, onDelete, onExport, isAdmi
 
     const pollProject = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/projects/${project.id}`, {
+        const response = await fetch(`${API_BASE_URL}/projects/${project.id}`, {
           headers: {
             'Content-Type': 'application/json',
             ...(projectService.token && { 'Authorization': `Bearer ${projectService.token}` })
@@ -1351,7 +1353,7 @@ const handleViewProject = async (project) => {
   
   try {
     // Fetch fresh project data to ensure we have the latest
-    const response = await fetch(`http://localhost:5000/api/projects/${project.id}`, {
+    const response = await fetch(`${API_BASE_URL}/projects/${project.id}`, {
       headers: {
         'Content-Type': 'application/json',
         ...(projectService?.token && { 'Authorization': `Bearer ${projectService.token}` })
@@ -1858,7 +1860,7 @@ useEffect(() => {
 
 const handleLogin = async (formData) => {
   try {
-    const response = await fetch('http://localhost:5000/api/auth/login', {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -1886,7 +1888,7 @@ const handleLogin = async (formData) => {
 
   const handleRegister = async (formData) => {
   try {
-    const response = await fetch('http://localhost:5000/api/auth/register', {
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
